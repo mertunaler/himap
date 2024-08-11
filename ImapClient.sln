@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A54E6619-A15C-465F-A2D3-DBD530222344}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMAP.Core", "IMAP.Core\IMAP.Core.csproj", "{BFBF0970-4924-41A5-9775-3A77F7ED4B36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMAP.API", "IMAP.API\IMAP.API.csproj", "{AACC367C-0205-4E96-9A5A-ED833177CD0A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BFBF0970-4924-41A5-9775-3A77F7ED4B36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFBF0970-4924-41A5-9775-3A77F7ED4B36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFBF0970-4924-41A5-9775-3A77F7ED4B36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFBF0970-4924-41A5-9775-3A77F7ED4B36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AACC367C-0205-4E96-9A5A-ED833177CD0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AACC367C-0205-4E96-9A5A-ED833177CD0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AACC367C-0205-4E96-9A5A-ED833177CD0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AACC367C-0205-4E96-9A5A-ED833177CD0A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BFBF0970-4924-41A5-9775-3A77F7ED4B36} = {A54E6619-A15C-465F-A2D3-DBD530222344}
+		{AACC367C-0205-4E96-9A5A-ED833177CD0A} = {A54E6619-A15C-465F-A2D3-DBD530222344}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {548086AA-2313-4E93-AF1D-302964ED9181}
+	EndGlobalSection
+EndGlobal
