@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMAP.Core", "IMAP.Core\IMAP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMAP.API", "IMAP.API\IMAP.API.csproj", "{AACC367C-0205-4E96-9A5A-ED833177CD0A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F9295E3F-5A25-45B1-861D-0B9DD0B49DAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.UnitTests", "tests\Core.UnitTests\Core.UnitTests.csproj", "{034E583F-6C89-41EC-9C17-DBF2EDAE6A51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +27,10 @@ Global
 		{AACC367C-0205-4E96-9A5A-ED833177CD0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AACC367C-0205-4E96-9A5A-ED833177CD0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AACC367C-0205-4E96-9A5A-ED833177CD0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{034E583F-6C89-41EC-9C17-DBF2EDAE6A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{034E583F-6C89-41EC-9C17-DBF2EDAE6A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{034E583F-6C89-41EC-9C17-DBF2EDAE6A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{034E583F-6C89-41EC-9C17-DBF2EDAE6A51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BFBF0970-4924-41A5-9775-3A77F7ED4B36} = {A54E6619-A15C-465F-A2D3-DBD530222344}
 		{AACC367C-0205-4E96-9A5A-ED833177CD0A} = {A54E6619-A15C-465F-A2D3-DBD530222344}
+		{034E583F-6C89-41EC-9C17-DBF2EDAE6A51} = {F9295E3F-5A25-45B1-861D-0B9DD0B49DAE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {548086AA-2313-4E93-AF1D-302964ED9181}
