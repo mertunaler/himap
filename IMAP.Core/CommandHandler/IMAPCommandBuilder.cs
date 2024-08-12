@@ -19,7 +19,7 @@ public class IMAPCommandBuilder : ICommandBuilder
     }
     public ICommandBuilder WithParameters(params string[] parameters)
     {
-        _params = string.Join("", parameters);
+        _params = string.Join(" ", parameters);
         return this;
     }
 }
