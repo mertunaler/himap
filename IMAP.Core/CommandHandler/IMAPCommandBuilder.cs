@@ -10,7 +10,7 @@ public class IMAPCommandBuilder : ICommandBuilder
 
     public string Build()
     {
-        return $@"{_command} {_params}";
+        return $@"{_command} {_params}".Trim();
     }
     public ICommandBuilder WithCommand(string command)
     {
