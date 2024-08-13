@@ -1,6 +1,4 @@
 using IMAP.Core;
-using IMAP.Core.CommandHandler;
-using NuGet.Frameworks;
 
 namespace Core.UnitTests;
 
@@ -15,9 +13,20 @@ public class ImapClientTests
 
         Assert.True(isConnected);
     }
+    [Fact]
+    public void AuthenticatesSuccessfully()
+    {
+        var sut = GetImapClient();
+        bool isConnected = sut.ConnectAsync("imap.gmail.com", 993).Result;
+        //I may have to create configreader...
+        bool isAuthenticated = sut.AuthenticateAsync("CENSORED", "CENSORED").Result;
+
+        Assert.True(isAuthenticated);
+    }
     private ImapClient GetImapClient()
     {
         return new ImapClient();
     }
+    
 
 }
