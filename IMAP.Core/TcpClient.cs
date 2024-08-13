@@ -1,3 +1,5 @@
+using System.Net.Security;
+using System.Net.Sockets;
 using System.Text;
 
 namespace IMAP.Core;
@@ -5,24 +7,38 @@ namespace IMAP.Core;
 public class TcpClient : IDisposable
 {
     private System.Net.Sockets.TcpClient _client;
-    private Stream _stream;
+    private SslStream _sslStream;
     private StreamReader _streamReader;
     private StreamWriter _streamWriter;
-    public async Task<bool> ConnectAsync(string hostName, int port)
+    public async Task<bool> ConnectAsync(string hostName, int port, bool useSsl = true)
     {
-        try
-        {
-            _client = new System.Net.Sockets.TcpClient();
-            await _client.ConnectAsync(hostName, port);
-            _stream = _client.GetStream();
-            _streamReader = new StreamReader(_stream, Encoding.UTF8);
-            _streamWriter = new StreamWriter(_stream, Encoding.UTF8);
-            return true;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
+         try
+            {
+                _client = new System.Net.Sockets.TcpClient();
+                await _client.ConnectAsync(hostName, port);
+
+                NetworkStream networkStream = _client.GetStream();
+
+                if (useSsl)
+                {
+                    _sslStream = new SslStream(networkStream, false, 
+                        new RemoteCertificateValidationCallback((sender, certificate, chain, sslPolicyErrors) => true));
+                    await _sslStream.AuthenticateAsClientAsync(hostName);
+                    _streamReader = new StreamReader(_sslStream, Encoding.UTF8);
+                    _streamWriter = new StreamWriter(_sslStream, Encoding.UTF8);
+                }
+                else
+                {
+                    _streamReader = new StreamReader(networkStream, Encoding.UTF8);
+                    _streamWriter = new StreamWriter(networkStream, Encoding.UTF8);
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
     }
     public async Task SendAsync(string data)
     {
@@ -41,7 +57,7 @@ public class TcpClient : IDisposable
     public void Dispose()
     {
         _client.Dispose();
-        _stream.Dispose();
+        _sslStream.Dispose();
         _streamReader.Dispose();
         _streamWriter.Dispose();
     }

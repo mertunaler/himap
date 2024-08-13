@@ -85,7 +85,7 @@ public class ImapClient : IDisposable
         if (string.IsNullOrEmpty(response))
             return false;
 
-        return response.StartsWith("OK", StringComparison.InvariantCultureIgnoreCase);
+        return response.StartsWith("* OK", StringComparison.InvariantCultureIgnoreCase);
 
     }
 }
