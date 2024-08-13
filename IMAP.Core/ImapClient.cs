@@ -14,7 +14,6 @@ public class ImapClient : IDisposable
         _tcpClient = new TcpClient();
         _builder = new IMAPCommandBuilder();
     }
-
     public async Task ConnectAsync(string hostName, int port)
     {
         await _tcpClient.ConnectAsync(hostName, port);

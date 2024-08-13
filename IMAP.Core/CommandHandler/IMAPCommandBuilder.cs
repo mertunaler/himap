@@ -7,10 +7,13 @@ public class IMAPCommandBuilder : ICommandBuilder
 {
     private string _command;
     private string _params;
+    private int _tagCounter = 0;
 
     public string Build()
     {
-        return $@"{_command} {_params}".Trim();
+        string tagPrefix = $"A{_tagCounter++:D4}";
+
+        return $"{tagPrefix} {_command} {_params}".Trim();
     }
     public ICommandBuilder WithCommand(string command)
     {
