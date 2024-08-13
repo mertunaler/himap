@@ -8,13 +8,21 @@ public class TcpClient : IDisposable
     private Stream _stream;
     private StreamReader _streamReader;
     private StreamWriter _streamWriter;
-    public async Task ConnectAsync(string hostName, int port)
+    public async Task<bool> ConnectAsync(string hostName, int port)
     {
-        _client = new System.Net.Sockets.TcpClient();
-        await _client.ConnectAsync(hostName, port);
-        _stream = _client.GetStream();
-        _streamReader = new StreamReader(_stream, Encoding.UTF8);
-        _streamWriter = new StreamWriter(_stream, Encoding.UTF8);
+        try
+        {
+            _client = new System.Net.Sockets.TcpClient();
+            await _client.ConnectAsync(hostName, port);
+            _stream = _client.GetStream();
+            _streamReader = new StreamReader(_stream, Encoding.UTF8);
+            _streamWriter = new StreamWriter(_stream, Encoding.UTF8);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
     public async Task SendAsync(string data)
     {
