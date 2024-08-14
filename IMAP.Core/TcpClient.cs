@@ -12,33 +12,33 @@ public class TcpClient : IDisposable
     private StreamWriter _streamWriter;
     public async Task<bool> ConnectAsync(string hostName, int port, bool useSsl = true)
     {
-         try
+        try
+        {
+            _client = new System.Net.Sockets.TcpClient();
+            await _client.ConnectAsync(hostName, port);
+
+            NetworkStream networkStream = _client.GetStream();
+
+            if (useSsl)
             {
-                _client = new System.Net.Sockets.TcpClient();
-                await _client.ConnectAsync(hostName, port);
-
-                NetworkStream networkStream = _client.GetStream();
-
-                if (useSsl)
-                {
-                    _sslStream = new SslStream(networkStream, false, 
-                        new RemoteCertificateValidationCallback((sender, certificate, chain, sslPolicyErrors) => true));
-                    await _sslStream.AuthenticateAsClientAsync(hostName);
-                    _streamReader = new StreamReader(_sslStream, Encoding.ASCII);
-                    _streamWriter = new StreamWriter(_sslStream, Encoding.ASCII);
-                }
-                else
-                {
-                    _streamReader = new StreamReader(networkStream, Encoding.ASCII);
-                    _streamWriter = new StreamWriter(networkStream, Encoding.ASCII);
-                }
-
-                return true;
+                _sslStream = new SslStream(networkStream, false,
+                    new RemoteCertificateValidationCallback((sender, certificate, chain, sslPolicyErrors) => true));
+                await _sslStream.AuthenticateAsClientAsync(hostName);
+                _streamReader = new StreamReader(_sslStream, Encoding.ASCII);
+                _streamWriter = new StreamWriter(_sslStream, Encoding.ASCII);
             }
-            catch
+            else
             {
-                return false;
+                _streamReader = new StreamReader(networkStream, Encoding.ASCII);
+                _streamWriter = new StreamWriter(networkStream, Encoding.ASCII);
             }
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
     public async Task SendAsync(string data)
     {
@@ -53,7 +53,16 @@ public class TcpClient : IDisposable
         if (_streamReader is null)
             throw new InvalidOperationException("Connection is not established yet.");
 
-        return await _streamReader.ReadLineAsync();
+        var responseBuilder = new StringBuilder();
+        string line;
+        while ((line = await _streamReader.ReadLineAsync()) != null)
+        {
+            responseBuilder.AppendLine(line);
+
+            if (line.StartsWith("* BYE"))
+                break;
+        }
+        return responseBuilder.ToString();
     }
     public void Dispose()
     {
