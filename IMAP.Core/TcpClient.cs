@@ -26,13 +26,14 @@ public class TcpClient : IDisposable
                 await _sslStream.AuthenticateAsClientAsync(hostName);
                 _streamReader = new StreamReader(_sslStream, Encoding.ASCII);
                 _streamWriter = new StreamWriter(_sslStream, Encoding.ASCII);
+
             }
             else
             {
                 _streamReader = new StreamReader(networkStream, Encoding.ASCII);
                 _streamWriter = new StreamWriter(networkStream, Encoding.ASCII);
             }
-
+            _streamWriter.AutoFlush = true;
             return true;
         }
         catch
@@ -45,24 +46,22 @@ public class TcpClient : IDisposable
         if (_streamWriter is null)
             throw new InvalidOperationException("Connection is not established yet.");
 
-        await _streamWriter.WriteLineAsync(data);
-        _streamWriter.FlushAsync();
+        await _streamWriter.WriteAsync(data + "\r\n");
     }
     public async Task<string> RetrieveAsync()
     {
         if (_streamReader is null)
             throw new InvalidOperationException("Connection is not established yet.");
 
-        var responseBuilder = new StringBuilder();
+        var sb = new StringBuilder();
         string line;
         while ((line = await _streamReader.ReadLineAsync()) != null)
         {
-            responseBuilder.AppendLine(line);
-
+            sb.AppendLine(line);
             if (line.StartsWith("* BYE"))
                 break;
         }
-        return responseBuilder.ToString();
+        return sb.ToString();
     }
     public void Dispose()
     {
