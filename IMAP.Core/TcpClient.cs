@@ -24,13 +24,13 @@ public class TcpClient : IDisposable
                     _sslStream = new SslStream(networkStream, false, 
                         new RemoteCertificateValidationCallback((sender, certificate, chain, sslPolicyErrors) => true));
                     await _sslStream.AuthenticateAsClientAsync(hostName);
-                    _streamReader = new StreamReader(_sslStream, Encoding.UTF8);
-                    _streamWriter = new StreamWriter(_sslStream, Encoding.UTF8);
+                    _streamReader = new StreamReader(_sslStream, Encoding.ASCII);
+                    _streamWriter = new StreamWriter(_sslStream, Encoding.ASCII);
                 }
                 else
                 {
-                    _streamReader = new StreamReader(networkStream, Encoding.UTF8);
-                    _streamWriter = new StreamWriter(networkStream, Encoding.UTF8);
+                    _streamReader = new StreamReader(networkStream, Encoding.ASCII);
+                    _streamWriter = new StreamWriter(networkStream, Encoding.ASCII);
                 }
 
                 return true;
@@ -46,6 +46,7 @@ public class TcpClient : IDisposable
             throw new InvalidOperationException("Connection is not established yet.");
 
         await _streamWriter.WriteLineAsync(data);
+        _streamWriter.FlushAsync();
     }
     public async Task<string> RetrieveAsync()
     {
