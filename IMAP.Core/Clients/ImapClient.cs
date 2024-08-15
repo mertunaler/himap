@@ -83,7 +83,7 @@ public class ImapClient : IDisposable
                 var parts = line.Split(new[] { ' ' }, 6, StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length >= 6)
                 {
-                    mailList.Append(parts[5].Trim('"'));
+                    mailList.Add(parts[5].Trim('"'));
                 }
             }
         }
