@@ -24,8 +24,9 @@ public class ImapClient : IDisposable
                                  .WithParameters(username, password)
                                  .Build();
 
+        string tag = GetCommandTag(command);
         await _tcpClient.SendAsync(command);
-        string response = await _tcpClient.RetrieveAsync();
+        string response = await _tcpClient.RetrieveAsync(tag);
 
         if (!IsAuthSuccessful(response))
             return false;
@@ -36,9 +37,9 @@ public class ImapClient : IDisposable
         string command = _builder.WithCommand("LIST")
                                  .WithParameters("\"\"", "\"*\"") //start from the root folder and get all the mailboxes
                                  .Build();
-
+        string tag = GetCommandTag(command);
         await _tcpClient.SendAsync(command);
-        string response = await _tcpClient.RetrieveAsync();
+        string response = await _tcpClient.RetrieveAsync(tag);
 
         var mailBoxList = ProcessMailBoxList(response);
 
@@ -49,9 +50,9 @@ public class ImapClient : IDisposable
         string command = _builder.WithCommand("SELECT")
                                  .WithParameters(mailBoxName)
                                  .Build();
-
+        string tag = GetCommandTag(command);
         await _tcpClient.SendAsync(command);
-        string response = await _tcpClient.RetrieveAsync();
+        string response = await _tcpClient.RetrieveAsync(tag);
 
         if (!response.Contains("SELECT completed"))
             throw new InvalidOperationException("Couldn't select mailbox.");
@@ -87,5 +88,9 @@ public class ImapClient : IDisposable
 
         return response.StartsWith("* OK", StringComparison.InvariantCultureIgnoreCase);
 
+    }
+    private string GetCommandTag(string cmd)
+    {
+        return cmd.Substring(0, cmd.IndexOf(' '));
     }
 }

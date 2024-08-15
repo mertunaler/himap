@@ -48,7 +48,7 @@ public class TcpClient : IDisposable
 
         await _streamWriter.WriteAsync(data + "\r\n");
     }
-    public async Task<string> RetrieveAsync()
+    public async Task<string> RetrieveAsync(string tag)
     {
         if (_streamReader is null)
             throw new InvalidOperationException("Connection is not established yet.");
@@ -57,8 +57,9 @@ public class TcpClient : IDisposable
         string line;
         while ((line = await _streamReader.ReadLineAsync()) != null)
         {
+
             sb.AppendLine(line);
-            if (line.StartsWith("* BYE"))
+            if (line.StartsWith("* BYE") || line.StartsWith(tag))
                 break;
         }
         return sb.ToString();
@@ -70,4 +71,5 @@ public class TcpClient : IDisposable
         _streamReader.Dispose();
         _streamWriter.Dispose();
     }
+   
 }
