@@ -34,7 +34,7 @@ public class ImapClient : IDisposable
     public async Task<List<string>> ListMailBoxesAsync()
     {
         string command = _builder.WithCommand("LIST")
-                                 .WithParameters("", "*") //start from the root folder and get all the mailboxes
+                                 .WithParameters("\"\"", "\"*\"") //start from the root folder and get all the mailboxes
                                  .Build();
 
         await _tcpClient.SendAsync(command);
