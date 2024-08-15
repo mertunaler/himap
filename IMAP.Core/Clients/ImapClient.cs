@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Net.Security;
 using System.Security.Authentication;
 using IMAP.Core.CommandHandler;
@@ -28,9 +29,8 @@ public class ImapClient : IDisposable
         await _tcpClient.SendAsync(command);
         string response = await _tcpClient.RetrieveAsync(tag);
 
-        if (!IsAuthSuccessful(response))
-            return false;
-        return true;
+        return ProcessAuthResponse(response, tag);
+
     }
     public async Task<List<string>> ListMailBoxesAsync()
     {
@@ -41,7 +41,7 @@ public class ImapClient : IDisposable
         await _tcpClient.SendAsync(command);
         string response = await _tcpClient.RetrieveAsync(tag);
 
-        var mailBoxList = ProcessMailBoxList(response);
+        var mailBoxList = ProcessMailBoxListResponse(response);
 
         return mailBoxList;
     }
@@ -62,8 +62,16 @@ public class ImapClient : IDisposable
     {
         throw new NotImplementedException();
     }
+    private bool ProcessAuthResponse(string response, string tag)
+    {
+        if (string.IsNullOrEmpty(response))
+            return false;
 
-    private List<string> ProcessMailBoxList(string boxResponse)
+        var responseLines = response.Split("\n").Where(w=> w != string.Empty);
+
+        return responseLines.Last().StartsWith($"{tag} OK");
+    }
+    private List<string> ProcessMailBoxListResponse(string boxResponse)
     {
         var responseLines = boxResponse.Split("\n");
         List<string> mailList = new List<string>();
@@ -81,14 +89,7 @@ public class ImapClient : IDisposable
         }
         return mailList;
     }
-    private bool IsAuthSuccessful(string response)
-    {
-        if (string.IsNullOrEmpty(response))
-            return false;
 
-        return response.StartsWith("* OK", StringComparison.InvariantCultureIgnoreCase);
-
-    }
     private string GetCommandTag(string cmd)
     {
         return cmd.Substring(0, cmd.IndexOf(' '));
