@@ -18,22 +18,33 @@ namespace IMAP.API.Controllers
                     Success = false,
                     Message = "Email and password must be provided."
                 });
+            try
+            {
+                ImapClient client = new ImapClient();
+                await client.ConnectAsync("imap.gmail.com", 993);
+                bool authResult = await client.AuthenticateAsync(request.UserName, request.PassWord);
 
-            ImapClient client = new ImapClient();
-            bool authResult = await client.AuthenticateAsync(request.UserName, request.PassWord);
-
-            if (authResult)
-                return Ok(new LoginResponse
-                {
-                    Success = true,
-                    Message = "Signed in successfully."
-                });
-            else
-                return Unauthorized(new LoginResponse
+                if (authResult)
+                    return Ok(new LoginResponse
+                    {
+                        Success = true,
+                        Message = "Signed in successfully."
+                    });
+                else
+                    return Unauthorized(new LoginResponse
+                    {
+                        Success = false,
+                        Message = "Invalid email or password."
+                    });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new LoginResponse
                 {
                     Success = false,
-                    Message = "Invalid email or password."
+                    Message = ex.Message
                 });
+            }
         }
     }
 }
