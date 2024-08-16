@@ -26,7 +26,7 @@ namespace IMAP.API.Controllers
                 return Ok(new LoginResponse
                 {
                     Success = true,
-                    Message = "Login successful",
+                    Message = "Signed in successfully."
                 });
             else
                 return Unauthorized(new LoginResponse
