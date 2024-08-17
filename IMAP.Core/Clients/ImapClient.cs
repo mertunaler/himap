@@ -19,19 +19,21 @@ public class ImapClient : IDisposable
     {
         return await _tcpClient.ConnectAsync(hostName, port);
     }
-    public async Task<bool> AuthenticateAsync(string username, string password)
-    {
-        string command = _builder.WithCommand("LOGIN")
-                                 .WithParameters(username, password)
-                                 .Build();
+  public async Task<bool> AuthenticateAsync(string username, string password)
+{
+    string command = _builder.WithCommand("LOGIN")
+                             .WithParameters(username, password)
+                             .Build();
 
-        string tag = GetCommandTag(command);
-        await _tcpClient.SendAsync(command);
-        string response = await _tcpClient.RetrieveAsync(tag);
+    string tag = GetCommandTag(command);
+    await _tcpClient.SendAsync(command);
+    string response = await _tcpClient.RetrieveAsync(tag);
 
-        return ProcessAuthResponse(response, tag);
+    if (!ProcessAuthResponse(response, tag))
+        throw new AuthenticationException("Invalid email or password.");
 
-    }
+    return true;
+}
     public async Task<List<string>> ListMailBoxesAsync()
     {
         string command = _builder.WithCommand("LIST")
